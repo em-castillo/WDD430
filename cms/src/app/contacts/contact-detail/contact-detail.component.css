@@ -1,0 +1,20 @@
+.panel-title{
+    font-size:24px;
+}
+
+.panel-heading{
+    padding-top:40px;
+    padding-bottom:40px;
+}
+
+.btn.btn-danger{
+    margin-left:5px;
+}
+
+.contact-image{
+    width: 8rem;
+}
+
+.col.text-right{
+    margin-right:8px;
+}

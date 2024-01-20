@@ -9,34 +9,18 @@
       </div>
     </div>
   </div>
-  <div class="panel-body"></div>
-</div>
-
-<!-- <div class="row">
-  <div class="col-xs-12">
-    <button class="btn btn-success">Contacts</button>
-  </div>
-</div>
-<hr />
-<div class="row">
-  <div class="col-xs-12">
-    <a
-      href="#"
-      class="list-group-item clearfix"
-      *ngFor="let contact of contacts"
-    >
-      <div class="pull-left">
-        <h4 class="list-group-item-heading">{{ contact.name }}</h4>
-        <p class="list-group-item-text">{{ contact.description }}</p>
+  <div class="panel-body">
+    <div *ngFor="let contact of contacts" class="row contact-item">
+      <div class="col-xs-6">
+        <h3>{{ contact.name }}</h3>
       </div>
-      <span class="pull-right">
+      <div class="col-xs-6 text-right">
         <img
-          [src]="contact.imagePath"
+          [src]="contact.imageUrl"
           alt="{{ contact.name }}"
-          class="img-responsive"
-          style="max-height: 50px"
+          class="contact-image"
         />
-      </span>
-    </a>
+      </div>
+    </div>
   </div>
-</div> -->
+</div>

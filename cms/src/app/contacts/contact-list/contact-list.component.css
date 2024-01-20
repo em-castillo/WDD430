@@ -3,5 +3,24 @@
 }
 
 .panel-title{
-    font-size: 24px;
+    font-size: 28px;
+}
+
+.panel-body{
+    margin:20px;
+}
+
+.contact-item{
+    border:1px solid #ddd;
+    border-radius: 8px;
+}
+
+.contact-image{
+    margin: 10px;
+    width: 8rem;
+}
+
+.btn.btn-success{
+float:right;
+margin-right: 2rem;
 }
