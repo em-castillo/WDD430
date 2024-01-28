@@ -1,4 +1,4 @@
-import { Component,   OnInit } from '@angular/core';
+import { Component,   EventEmitter,   OnInit, Output } from '@angular/core';
 import {Contact} from '../contact.model';
 
 @Component({
@@ -15,6 +15,12 @@ export class ContactListComponent implements OnInit{
       '2', 'R. Rex Barzee Jackson', 'barzeer@byui.edu@byui.edu', '208-496-3768', '../../assets/images/barzeer.jpg', undefined
     )
   ];
+
+  @Output() selectedContactEvent = new EventEmitter<Contact>();
+
+  onSelected(contact: Contact){
+    this.selectedContactEvent.emit(contact);
+  }
 
   constructor(){}
 
