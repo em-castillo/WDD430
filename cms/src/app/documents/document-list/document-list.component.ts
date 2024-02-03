@@ -7,8 +7,10 @@ import { Document } from '../document.model';
   styleUrl: './document-list.component.css'
 })
 export class DocumentListComponent {
+  // emit and output a custom event 
   @Output() selectedDocumentEvent = new EventEmitter<Document>();
 
+  // variable named documents that is an array of document objects
   documents: Document[] = [
     new Document(
       '1', 'Document name 1', 'Document description 1', 'www.document1.com'
@@ -24,6 +26,7 @@ export class DocumentListComponent {
     ),
   ];
 
+  // method
   onSelectedDocument(document: Document){
     this.selectedDocumentEvent.emit(document);
   }

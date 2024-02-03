@@ -6,6 +6,7 @@ import { Document } from '../document.model';
   templateUrl: './document-detail.component.html',
   styleUrl: './document-detail.component.css'
 })
+// class input 
 export class DocumentDetailComponent {
   @Input() document:Document;
 }
