@@ -2,14 +2,6 @@ import {Contact} from './contact.model';
 
 export const MOCKCONTACTS: Contact[] = [
   // individual contacts
-  {
-    id: '0',
-    name: 'Fred Flinstone',
-    email: 'Flinstone@byui.edu',
-    phone: '208-496-9743',
-    imageUrl: '../../assets/images/fredFlintstone.png',
-    group: null
-  },
   // index 0
   {
     id: '1',
@@ -285,5 +277,13 @@ export const MOCKCONTACTS: Contact[] = [
       group: null
     }
   ]
+  },
+  {
+    id: '0',
+    name: 'Fred Flinstone',
+    email: 'Flinstone@byui.edu',
+    phone: '208-496-9743',
+    imageUrl: '../../assets/images/fredFlintstone.png',
+    group: null
   }
 ];
