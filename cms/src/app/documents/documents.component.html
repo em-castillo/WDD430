@@ -1,16 +1,14 @@
 <div class="row">
   <div class="col-md-5">
     <!-- detects event emitted -->
-    <app-document-list
-      (selectedDocumentEvent)="selectedDocument = $event"
-    ></app-document-list>
+    <cms-document-list></cms-document-list>
   </div>
 
   <div class="col-md-4">
     <!-- directive -->
-    <app-document-detail
+    <cms-document-detail
       *ngIf="selectedDocument"
       [document]="selectedDocument"
-    ></app-document-detail>
+    ></cms-document-detail>
   </div>
 </div>
