@@ -1,4 +1,8 @@
-<a class="row contact-item list-group-item clearfix">
+<a
+  routerLinkActive="active"
+  [routerLink]="[contact.id]"
+  class="row contact-item list-group-item clearfix"
+>
   <div class="col-xs-6">
     <h3>{{ contact.name }}</h3>
   </div>

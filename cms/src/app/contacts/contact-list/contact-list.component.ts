@@ -29,8 +29,19 @@ export class ContactListComponent implements OnInit{
 
   // call getContacts() and assign the array of contacts returned 
   ngOnInit(){
-    this.contacts = this.contactsService.getContacts();
+    
+  this.contactsService.contactChangedEvent
+    .subscribe(
+      (contact: Contact) => {
+        // this.docChangeEvent = document;
+        this.contacts = this.contactsService.getContacts();
+      }
+      );
+      this.contacts = this.contactsService.getContacts();
+
   }
+
+  
 
 
 }

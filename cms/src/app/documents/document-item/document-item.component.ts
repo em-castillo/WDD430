@@ -10,5 +10,6 @@ import { Document } from '../document.model';
 // input class
 export class DocumentItemComponent {
   @Input() document:Document;
+  @Input() index: number;
 
 }

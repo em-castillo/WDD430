@@ -8,6 +8,8 @@ import { DocumentsService } from '../documents.service';
   styleUrl: './document-list.component.css'
 })
 export class DocumentListComponent implements OnInit{
+  docChangeEvent = Document;
+  
   // emit and output a custom event 
   // @Output() selectedDocumentEvent = new EventEmitter<Document>();
 
@@ -27,15 +29,27 @@ export class DocumentListComponent implements OnInit{
     // ),
   ];
 
-  constructor(private documentsService: DocumentsService){}
+  constructor(private documentsService: DocumentsService){
+    
+  }
 
   ngOnInit(){
+
+  this.documentsService.documentChangedEvent
+  .subscribe(
+    (document: Document) => {
+      // this.docChangeEvent = document;
+      this.documents = this.documentsService.getDocuments();
+    }
+    );
+
     this.documents = this.documentsService.getDocuments();
+
   }
 
   // method
-  onSelectedDocument(document: Document){
-    this.documentsService.documentSelectedEvent.emit(document);
-  }
+  // onSelectedDocument(document: Document){
+  //   this.documentsService.documentSelectedEvent.emit(document);
+  // }
 
 }

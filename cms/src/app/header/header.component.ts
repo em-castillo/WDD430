@@ -17,10 +17,10 @@ export class HeaderComponent {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
 
-  @Output() selectedFeatureEvent =  new EventEmitter<string>();
+  // @Output() selectedFeatureEvent =  new EventEmitter<string>();
 
-  onSelected(selectedEvent: string){
-    this.selectedFeatureEvent.emit(selectedEvent);
-  }
+  // onSelected(selectedEvent: string){
+  //   this.selectedFeatureEvent.emit(selectedEvent);
+  // }
 
 }
