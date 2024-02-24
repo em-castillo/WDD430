@@ -1,13 +1,16 @@
-import { Component,   EventEmitter,   OnInit, Output } from '@angular/core';
+import { Component,   EventEmitter,   OnDestroy,   OnInit, Output } from '@angular/core';
 import {Contact} from '../contact.model';
 import { ContactsService } from '../contacts.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-contact-list',
   templateUrl: './contact-list.component.html',
   styleUrl: './contact-list.component.css'
 })
-export class ContactListComponent implements OnInit{
+export class ContactListComponent implements OnInit, OnDestroy{
+  private subscription: Subscription;
+
   contacts: Contact[] = [
     // new Contact(
     //   '1', 'R. Kent Jackson', 'jacksonk@byui.edu', '208-496-3771', '../../assets/images/jacksonk.jpg', undefined
@@ -30,17 +33,21 @@ export class ContactListComponent implements OnInit{
   // call getContacts() and assign the array of contacts returned 
   ngOnInit(){
     
-  this.contactsService.contactChangedEvent
+  this.subscription = this.contactsService.contactListChangedEvent
     .subscribe(
-      (contact: Contact) => {
+      (contactList: Contact[]) => {
         // this.docChangeEvent = document;
-        this.contacts = this.contactsService.getContacts();
+        // this.contacts = this.contactsService.getContacts();
+        this.contacts = contactList;
       }
       );
       this.contacts = this.contactsService.getContacts();
 
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
   
 
 

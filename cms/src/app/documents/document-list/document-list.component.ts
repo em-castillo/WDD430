@@ -1,14 +1,16 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Document } from '../document.model';
 import { DocumentsService } from '../documents.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-document-list',
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.css'
 })
-export class DocumentListComponent implements OnInit{
-  docChangeEvent = Document;
+export class DocumentListComponent implements OnInit, OnDestroy{
+  // docChangeEvent = Document;
+  private subscription : Subscription;
   
   // emit and output a custom event 
   // @Output() selectedDocumentEvent = new EventEmitter<Document>();
@@ -34,17 +36,22 @@ export class DocumentListComponent implements OnInit{
   }
 
   ngOnInit(){
-
-  this.documentsService.documentChangedEvent
+  
+  this.subscription =  this.documentsService.documentListChangedEvent
   .subscribe(
-    (document: Document) => {
+    (documentList: Document[]) => {
       // this.docChangeEvent = document;
-      this.documents = this.documentsService.getDocuments();
+      // this.documentList = this.documentsService.getDocuments();
+      this.documents = documentList;
     }
     );
 
     this.documents = this.documentsService.getDocuments();
 
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   // method
