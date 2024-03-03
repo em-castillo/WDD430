@@ -30,62 +30,63 @@ export class DocumentsService{
    return this.documents.find((c) => c.id === id);
   }
 
- getMaxId(): number {
+  getMaxId(): number {
 
-  let maxId = 0;
-  let currentId = 0;
+    let maxId = 0;
+    let currentId = 0;
 
-  this.documents.forEach(document => {
-    //convert document.id into a number
-      currentId = +document.id
-      if (currentId > maxId) {
-          maxId = currentId
- }
-})
+    this.documents.forEach(document => {
+      //convert document.id into a number
+        currentId = +document.id
+        if (currentId > maxId) {
+            maxId = currentId;
+  }
+  })
 
-  return maxId;
-}
+    return maxId;
+  }
 
-addDocument(newDocument: Document) {
-  if (!newDocument) {
+  addDocument(newDocument: Document) {
+    if (!newDocument) {
+        return;
+    }
+
+    this.maxDocumentId++;
+    // toString() converts number to string
+    newDocument.id = this.maxDocumentId.toString();
+    this.documents.push(newDocument);
+    this.documentsListClone = this.documents.slice();
+    this.documentListChangedEvent.next(this.documentsListClone);
+  }
+
+  updateDocument(originalDocument: Document, newDocument: Document) {
+    if (!originalDocument || !newDocument) {
+        return;
+    }
+
+    const pos = this.documents.indexOf(originalDocument);
+    if (pos < 0) {
+        return;
+    }
+
+    newDocument.id = originalDocument.id;
+    this.documents[pos] = newDocument;
+    this.documentsListClone = this.documents.slice();
+    this.documentListChangedEvent.next(this.documentsListClone);
+  }
+
+  deleteDocument(document: Document) {
+    if (!document) {
       return;
-  }
-
-  this.maxDocumentId++;
-  // toString() converts number to string
-  newDocument.id = this.maxDocumentId.toString();
-  this.documents.push(newDocument);
-  this.documentsListClone = this.documents.slice();
-  this.documentListChangedEvent.next(this.documentsListClone);
-}
-
-updateDocument(originalDocument: Document, newDocument: Document) {
-  if (!originalDocument || !newDocument) {
+    }
+    const pos = this.documents.indexOf(document);
+    if (pos < 0) {
       return;
+    }
+    this.documents.splice(pos, 1)
+    this.documentsListClone = this.documents.slice()
+    this.documentListChangedEvent.next(this.documentsListClone)
   }
-
-  const pos = this.documents.indexOf(originalDocument);
-  if (pos < 0) {
-      return;
-  }
-
-  newDocument.id = originalDocument.id;
-  this.documents[pos] = newDocument;
-  this.documentsListClone = this.documents.slice();
-  this.documentListChangedEvent.next(this.documentsListClone);
-}
-
-deleteDocument(document: Document) {
-  if (!document) {
-     return;
-  }
-  const pos = this.documents.indexOf(document);
-  if (pos < 0) {
-     return;
-  }
-  this.documentsListClone = this.documents.slice();
-  this.documentListChangedEvent.next(this.documentsListClone);
-}
 
 
 }

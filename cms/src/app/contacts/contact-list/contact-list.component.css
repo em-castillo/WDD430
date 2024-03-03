@@ -8,6 +8,8 @@
 
 .panel-body{
     margin:20px;
+    height: 80vh;
+    overflow-y: auto;
 }
 
 .btn.btn-success{
