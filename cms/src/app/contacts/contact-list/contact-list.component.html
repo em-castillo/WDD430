@@ -1,16 +1,35 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <div class="row">
-      <div class="col-xs-6">
-        <h1 class="panel-title text-left">Contacts</h1>
+      <span class="title pad-left-right">Contacts</span>
+    </div>
+    <div class="row">
+      <div class="input-group pull-left pad-left-right col-xs-7">
+        <!-- Add the search box input text field here-->
+        <input
+          #searchBox
+          (keyup)="search(searchBox.value)"
+          class="form-control"
+          placeholder="Enter a search value"
+          [ngModel]="term"
+        />
+
+        <div
+          class="glyphicon glyphicon-search input-group-addon"
+          (click)="search(searchBox.value)"
+        ></div>
       </div>
-      <div class="col-xs-6">
-        <a [routerLink]="['new']" class="btn btn-success"> New Contact </a>
-      </div>
+    </div>
+    <div class="pull-right pad-left-right">
+      <a class="btn btn-success" [routerLink]="['new']">New Contact</a>
     </div>
   </div>
   <div cdkDropList [cdkDropListData]="contacts" class="panel-body">
-    <div cdkDrag *ngFor="let contact of contacts" [cdkDragData]="contact">
+    <div
+      cdkDrag
+      *ngFor="let contact of contacts | contactsFilter : term"
+      [cdkDragData]="contact"
+    >
       <cms-contact-item
         [contact]="contact"
         (click)="onSelected(contact)"

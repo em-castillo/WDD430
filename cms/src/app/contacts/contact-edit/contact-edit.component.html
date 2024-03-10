@@ -55,10 +55,10 @@
             name="phone"
             [ngModel]="contact?.phone"
             #phone="ngModel"
-            pattern="“\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*“"
+            pattern="\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*"
           />
           <div
-            *ngIf="!phone.valid && phone.touched"
+            *ngIf="phone.touched && !phone.valid"
             class="alert alert-danger"
             role="alert"
           >
