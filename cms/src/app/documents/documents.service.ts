@@ -24,25 +24,41 @@ export class DocumentsService{
     this.maxDocumentId = this.getMaxId();
   }
 
-  getDocuments(){
+  sortDocuments(){
+    this.documents.sort((a,b)=> {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  getDocuments() {
     // return this.documents.slice();
-    return this.http.get<Document[]>('https://cms-project-bf086-default-rtdb.firebaseio.com/documents.json')
+    return this.http.get<Document[]>('http://localhost:3000/documents')
     .subscribe({
       // success method
-      next: (documents: Document[] ) => {
+      next: (documents: Document[]) => {
+        // console.log(documents);
          this.documents = documents;
          this.maxDocumentId = this.getMaxId();
-         this.documents.sort((a,b)=> {
-          const nameA = a.name.toUpperCase();
-          const nameB = b.name.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        });
+         this.sortDocuments();
+        //  this.documents.sort((a,b)=> {
+        //   const nameA = a.name.toUpperCase();
+        //   const nameB = b.name.toUpperCase();
+        //   if (nameA < nameB) {
+        //     return -1;
+        //   }
+        //   if (nameA > nameB) {
+        //     return 1;
+        //   }
+        //   return 0;
+        // });
          this.documentsListClone = this.documents.slice();
          this.documentListChangedEvent.next(this.documentsListClone);
       },
@@ -63,7 +79,8 @@ export class DocumentsService{
     let maxId = 0;
     let currentId = 0;
 
-    this.documents.forEach(document => {
+  
+      this.documents.forEach(document => {
       //convert document.id into a number
         currentId = +document.id
         if (currentId > maxId) {
@@ -88,50 +105,131 @@ export class DocumentsService{
     })
   }
 
-  addDocument(newDocument: Document) {
-    if (!newDocument) {
-        return;
+  addDocument(document: Document) {
+    if (!document) {
+      return;
     }
 
-    this.maxDocumentId++;
-    // toString() converts number to string
-    newDocument.id = this.maxDocumentId.toString();
-    this.documents.push(newDocument);
-    // this.documentsListClone = this.documents.slice();
-    // this.documentListChangedEvent.next(this.documentsListClone);
-    this.storeDocuments();
+    // make sure id of the new Document is empty
+    document.id = '';
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // add to database
+    this.http.post<{ message: string, document: Document }>('http://localhost:3000/documents',
+      document,
+      { headers: headers })
+      .subscribe(
+        (responseData) => {
+          // add new document to documents
+          this.documents.push(responseData.document);
+          this.documents.sort((a,b)=> {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+        }
+      );
+
+
+    // if (!newDocument) {
+    //     return;
+    // }
+
+    // this.maxDocumentId++;
+    // // toString() converts number to string
+    // newDocument.id = this.maxDocumentId.toString();
+    // this.documents.push(newDocument);
+    // // this.documentsListClone = this.documents.slice();
+    // // this.documentListChangedEvent.next(this.documentsListClone);
+    // this.storeDocuments();
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
     if (!originalDocument || !newDocument) {
-        return;
+      return;
     }
 
-    const pos = this.documents.indexOf(originalDocument);
+    const pos = this.documents.findIndex(d => d.id === originalDocument.id);
+
     if (pos < 0) {
-        return;
+      return;
     }
 
+    // set the id of the new Document to the id of the old Document
     newDocument.id = originalDocument.id;
-    this.documents[pos] = newDocument;
-    // this.documentsListClone = this.documents.slice();
-    // this.documentListChangedEvent.next(this.documentsListClone);
-    this.storeDocuments();
+    newDocument._id = originalDocument._id;
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // update database
+    this.http.put('http://localhost:3000/documents/' + originalDocument.id,
+      newDocument, { headers: headers })
+      .subscribe(
+        (response: Response) => {
+          this.documents[pos] = newDocument;
+          this.sortDocuments();
+        }
+      );
+
+
+
+    // if (!originalDocument || !newDocument) {
+    //     return;
+    // }
+
+    // const pos = this.documents.indexOf(originalDocument);
+    // if (pos < 0) {
+    //     return;
+    // }
+
+    // newDocument.id = originalDocument.id;
+    // this.documents[pos] = newDocument;
+    // // this.documentsListClone = this.documents.slice();
+    // // this.documentListChangedEvent.next(this.documentsListClone);
+    // this.storeDocuments();
   }
 
   deleteDocument(document: Document) {
     if (!document) {
       return;
     }
-    const pos = this.documents.indexOf(document);
+
+    const pos = this.documents.findIndex(d => d.id === document.id);
+
     if (pos < 0) {
       return;
     }
-    this.documents.splice(pos, 1)
-    // this.documentsListClone = this.documents.slice()
-    // this.documentListChangedEvent.next(this.documentsListClone)
-    this.storeDocuments();
-  }
+
+    // delete from database
+    this.http.delete('http://localhost:3000/documents/' + document.id)
+      .subscribe(
+        (response: Response) => {
+          this.documents.splice(pos, 1);
+          this.sortDocuments();
+        }
+      );
 
 
-}
+
+  //   if (!document) {
+  //     return;
+  //   }
+  //   const pos = this.documents.indexOf(document);
+  //   if (pos < 0) {
+  //     return;
+  //   }
+  //   this.documents.splice(pos, 1)
+  //   // this.documentsListClone = this.documents.slice()
+  //   // this.documentListChangedEvent.next(this.documentsListClone)
+  //   this.storeDocuments();
+  // }
+
+
+}}

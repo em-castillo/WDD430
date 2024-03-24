@@ -35,22 +35,29 @@ export class MessagesService {
     return maxId;
   }
 
+  private sortMessages() {
+    this.messages.sort((a, b) => a.msgText.localeCompare(b.msgText));
+  }
+
   getMessages(){
     // return this.messages.slice();
-    return this.http.get<Message[]>('https://cms-project-bf086-default-rtdb.firebaseio.com/messages.json')
+    return this.http.get<Message[]>('http://localhost:3000/messages')
     .subscribe({
       // success method
       next: (messages: Message[] ) => {
          this.messages = messages;
          this.maxMessageId = this.getMaxId();
+         this.sortMessages();
          this.messagesListClone = this.messages.slice();
          this.messageChangedEvent.next(this.messagesListClone);
+         console.log(messages);
       },
       // error method
       error: (error: any) => {
         console.error(error);
       }, 
    })
+   
   }
 
   getMessage(id: string): Message{
@@ -64,7 +71,7 @@ export class MessagesService {
         'Content-Type': 'application/json',
       }),
     };
-    this.http.put('https://cms-project-bf086-default-rtdb.firebaseio.com/messages.json',
+    this.http.put('http://localhost:3000/messages',
     MsgString, httpHeaders)
     .subscribe(response => {
       this.messageChangedEvent.next(this.messages.slice());
@@ -73,8 +80,29 @@ export class MessagesService {
 
 
   addMessage(message: Message){
-    this.messages.push(message);
-    this.messageChangedEvent.emit(this.messages.slice());
-    this.storeMessages();
+    if (!message) {
+      return;
+    }
+
+    message.id = '';
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // add to database
+    this.http.post<{ msg: string, msgProperty: Message }>('http://localhost:3000/messages',
+    message,
+      { headers: headers })
+      .subscribe(
+        (responseData) => {
+          this.messages.push(responseData.msgProperty);
+          this.sortMessages();
+        }
+      );
+
+
+
+    // this.messages.push(message);
+    // this.messageChangedEvent.emit(this.messages.slice());
+    // this.storeMessages();
   }
 }
