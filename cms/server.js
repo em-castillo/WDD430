@@ -16,8 +16,8 @@ const contactRoutes = require('./server/routes/contacts');
 const documentsRoutes = require('./server/routes/documents');
 
 // establish a connection to the mongo database
-mongoose.connect('mongodb+srv://wdd430_user:wdd430_user@cluster0.3diaaol.mongodb.net/cms')
-// mongoose.connect('mongodb+srv://wdd430_user:wdd430_user@cluster0.3diaaol.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+// mongoose.connect('mongodb+srv://wdd430_user:wdd430_user@cluster0.3diaaol.mongodb.net/cms')
+mongoose.connect('mongodb+srv://wdd430_user:wdd430_user@cluster0.3diaaol.mongodb.net/cms?retryWrites=true&w=majority&appName=Cluster0')
 .then(() => {
     console.log("Connected to the database!");
   })

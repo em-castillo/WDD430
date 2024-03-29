@@ -3,23 +3,25 @@ const Message = require('../models/message');
 
 var express = require('express');
 var router = express.Router();
-module.exports = router; 
+
 
 //get
-router.get('/', (req, res, next) => {
-    Message.find().then((msg) => {
+router.get('/', async (req, res, next) => {
+    Message.find()
+      .populate('sender')
+      .then((messages) => {
         res.status(200).json({
-          message: "Messages fetched successfully!",
-          messages: msg
+          message: 'Retrieved messages from database.',
+          messages: messages
         });
-      })
-      .catch((error) => {
+    })
+      .catch((err) => {
         res.status(500).json({
-          message: "An error ocurred.",
-          error: error
+          message: 'Cannot get messages.',
+          error: err
         });
-      });
- });
+    });
+});
 
  //post
  router.post('/', (req, res, next) => {
@@ -100,3 +102,5 @@ router.get('/', (req, res, next) => {
         });
       });
   });
+
+  module.exports = router; 

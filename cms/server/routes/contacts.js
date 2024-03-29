@@ -3,25 +3,26 @@ const Contact = require('../models/contact');
 
 var express = require('express');
 var router = express.Router();
-module.exports = router; 
+
 
 //get
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
+    console.log('GET contacts');
     Contact.find()
-    .populate('group')
-    .then((con) => {
-        res.status(200).json({
-          message: "Contacts fetched successfully!",
-          contacts: con
+        .populate('group')
+        .then((contacts) => {
+            res.status(200).json({
+                message: 'Contacts fetched successfully!',
+                contacts: contacts,
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({
+                message: 'Cannot get contacts.',
+                error: error,
+            });
         });
-      })
-      .catch((error) => {
-        res.status(500).json({
-          message: "An error ocurred.",
-          error: error
-        });
-      });
- });
+});
 
  //post
  router.post('/', (req, res, next) => {
@@ -106,3 +107,5 @@ router.get('/', (req, res, next) => {
         });
       });
   });
+
+  module.exports = router; 
