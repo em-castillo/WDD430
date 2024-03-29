@@ -48,17 +48,6 @@ export class DocumentsService{
          this.documents = documentData.documents;
          this.maxDocumentId = this.getMaxId();
          this.sortDocuments();
-        //  this.documents.sort((a,b)=> {
-        //   const nameA = a.name.toUpperCase();
-        //   const nameB = b.name.toUpperCase();
-        //   if (nameA < nameB) {
-        //     return -1;
-        //   }
-        //   if (nameA > nameB) {
-        //     return 1;
-        //   }
-        //   return 0;
-        // });
          this.documentsListClone = this.documents.slice();
          this.documentListChangedEvent.next(this.documentsListClone);
         //  console.log(this.documents);
@@ -97,7 +86,7 @@ export class DocumentsService{
         'Content-Type': 'application/json',
       }),
     };
-    this.http.put('https://cms-project-bf086-default-rtdb.firebaseio.com/documents.json',
+    this.http.put('http://localhost:3000/documents',
     docString, httpHeaders)
     .subscribe(response => {
       this.documentListChangedEvent.next(this.documents.slice());

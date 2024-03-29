@@ -7,7 +7,6 @@ var router = express.Router();
 
 //get
 router.get('/', async (req, res, next) => {
-    console.log('GET contacts');
     Contact.find()
         .populate('group')
         .then((contacts) => {
