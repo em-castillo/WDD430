@@ -30,14 +30,14 @@ export class MessagesService {
     let maxId = 0;
     // let currentId = 0;
 
-    for (let message of this.messages) {
+    this.messages.forEach(message => {
       // let currentId = + maxId;
       //convert document.id into a number
-        let currentId = +message.id
+        const currentId = +message.id
         if (currentId > maxId) {
             maxId = currentId;
   }
-  }
+  })
 
     return maxId;
   }
@@ -46,36 +46,16 @@ export class MessagesService {
     this.messages.sort((a, b) => a.msgText.localeCompare(b.msgText));
   }
 
-  // getMessages(){
-  //   // return this.messages.slice();
-  //   this.http.get<Message[]>('http://localhost:3000/messages')
-  //   .subscribe({
-  //     // success method
-  //     next: (messages: Message[] ) => {
-  //        this.messages = messages;
-  //        this.maxMessageId = this.getMaxId();
-  //        this.sortMessages();
-  //        this.messagesListClone = this.messages.slice();
-  //        this.messageChangedEvent.next(this.messagesListClone);
-  //        console.log(messages);
-  //     },
-  //     // error method
-  //     error: (error: any) => {
-  //       console.error(error);
-  //     }, 
-  //  })
-   
-  // }
-
   getMessages(): void {
-    // contacts are a prerequisite for messages.
-    // if (this.contactService.noContacts()) {
-    //   this.contactService.getContacts();
-    // }
     this.http.get('http://localhost:3000/messages')
     .subscribe({
+      // success method
       next: (messageData: {message: string, messages: Message[]}) => {
-        {
+        // console.log(documents);
+         this.messages = messageData.messages;
+         this.maxMessageId = this.getMaxId();
+         this.sortMessages();
+    
           // the populate() method at the server pulled down full contact
           // information based on the foreign key of the sender.
           // We only need the friendly id of the sender.
@@ -84,21 +64,18 @@ export class MessagesService {
               msg.sender = msg.sender['id'];
             }
           }
-          // purge messages with missing senders  
-          // this.messages = messageData.messages;
-          // for (let msg of this.messages) {
-          //   if (!msg.sender) {
-          //     this.deleteMessage(msg);
-          //   }
-          // }
 
           this.messagesListClone = this.messages.slice();
           this.messageChangedEvent.next(this.messagesListClone);
           console.log(this.messages);
-        }
-      }
+        },
+        // error method
+      error: (error: any) => {
+        console.error(error);
+      }, 
+    
     })
-    }
+}
         
 
   getMessage(id: string): Message{

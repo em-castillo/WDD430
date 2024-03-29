@@ -61,6 +61,7 @@ export class DocumentsService{
         // });
          this.documentsListClone = this.documents.slice();
          this.documentListChangedEvent.next(this.documentsListClone);
+        //  console.log(this.documents);
       },
       // error method
       error: (error: any) => {
