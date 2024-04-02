@@ -67,7 +67,7 @@ export class MessagesService {
 
           this.messagesListClone = this.messages.slice();
           this.messageChangedEvent.next(this.messagesListClone);
-          console.log(this.messages);
+          // console.log(this.messages);
         },
         // error method
       error: (error: any) => {
@@ -111,10 +111,13 @@ export class MessagesService {
     newMessage,
       { headers: headers })
       .subscribe(
-        (responseData) => {
+        {next: (responseData) => {
           this.messages.push(responseData.msgProperty);
           this.sortMessages();
+          console.log(responseData.msgProperty);
+          console.log('added')
         }
+      }
       );
 
 

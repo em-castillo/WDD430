@@ -105,7 +105,7 @@ storeContacts() {
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     // add to database
-    this.http.post<{ msg: string, contact: Contact }>('http://localhost:3000/contacts',
+    this.http.post<{ message: string, contact: Contact }>('http://localhost:3000/contacts',
     newContact,
       { headers: headers })
       .subscribe(
@@ -136,7 +136,8 @@ storeContacts() {
 
     // set the id of the new Document to the id of the old Document
     newContact.id = originalContact.id;
-    newContact._id = originalContact._id;
+    // newContact._id = originalContact._id;
+    this.contacts[pos] = newContact;
 
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
